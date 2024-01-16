@@ -1,0 +1,85 @@
+<?php
+
+$query = $db->prepare('SELECT * FROM users');
+$query->execute();
+$users = $query->fetchAll();
+?>
+
+<main class="container py-5">
+    <h1>
+        Liste des utilisateurs
+    </h1>
+    <a href="index.php?route=create-user" class="btn btn-primary mt-3"><span class="bi-plus-circle-fill"></span> Créer un utilisateur</a>
+    <table class="my-5 table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Mot de passe
+                </th>
+                <th>
+                    Prénom
+                </th>
+                <th>
+                    Nom
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($users as $user){?>
+            <tr>
+                <td>
+                    <?= $user['id']?>
+                </td>
+                <td>
+                    <?= $user['email']?>
+                </td>
+                <td>
+                    <?= $user['password']?>
+                </td>
+                <td>
+                    <?= $user['first_name']?>
+                </td>
+                <td>
+                    <?= $user['last_name']?>
+                </td>
+                <td>
+                    <a href="index.php?route=show-user&id=<?= $user['id'] ?>" class="btn btn-primary"><span class="bi-eye-fill"></span></a>
+                    <a href="index.php?route=edit-user&id=<?= $user['id'] ?>" class="btn btn-success"><span class="bi-pencil-fill"></span></a>
+                    <a href="logic/delete-user.php?id=<?= $user['id'] ?>" class="btn btn-danger"><span class="bi-trash-fill"></span></a>
+                </td>
+            </tr>
+        <?php } ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>
+                    #
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Mot de passe
+                </th>
+                <th>
+                    Prénom
+                </th>
+                <th>
+                    Nom
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </tfoot>
+    </table>
+</main>
