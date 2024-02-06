@@ -1,0 +1,52 @@
+<?php
+require '../config/connexion.php';
+include '../logic/hash_password.php';
+
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $isPasswordCorrect = password_verify($password, $hashedPassword);
+
+    if ($isPasswordCorrect === true) {
+
+        $query = $db->prepare('INSERT INTO users (first_name, password) VALUES (:username, :password)');
+        $parameters = [
+            'first_name' => $username, 
+            'password' => $hashedPassword, 
+        ];
+
+        $query->execute($parameters);
+
+        $_SESSION['username'] = $username;
+
+        header('Location: title.html');
+        exit();
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page de Connexion</title>
+</head>
+<body>
+    <h1>Connexion</h1>
+    <form action="connection.phtml" method="post">
+        <label for="username">Nom d'utilisateur :</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="password">Mot de passe :</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <input type="submit" value="Se connecter">
+    </form>
+</body>
+</html>
